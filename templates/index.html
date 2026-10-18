@@ -1,0 +1,125 @@
+```html
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KianNews | مرکز خبر</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: #090d16; color: #edf2ff;
+      font-family: Tahoma, Arial, sans-serif; line-height: 1.8;
+    }
+    header {
+      padding: 24px 6%; background: #101827;
+      border-bottom: 1px solid #28364b;
+    }
+    .brand { font-size: 27px; font-weight: bold; color: #72a7ff; }
+    .subtitle { color: #a9b7cc; font-size: 13px; }
+    main { max-width: 1100px; margin: auto; padding: 24px 16px; }
+    .toolbar, .filters, .news {
+      background: #111a2a; border: 1px solid #28364b;
+      border-radius: 14px; padding: 16px; margin-bottom: 16px;
+    }
+    form { display: flex; gap: 10px; flex-wrap: wrap; }
+    input, select, button {
+      font: inherit; border-radius: 9px; padding: 11px 13px;
+    }
+    input, select {
+      color: #fff; background: #0a1220;
+      border: 1px solid #35445c; min-width: 0;
+    }
+    input { flex: 1; }
+    button {
+      background: #3979ee; color: white; border: 0;
+      cursor: pointer; font-weight: bold;
+    }
+    button:hover { background: #5590ff; }
+    .secondary { background: #29384e; }
+    .status { color: #a9b7cc; font-size: 13px; margin-top: 8px; }
+    .news h2 { font-size: 18px; margin-top: 0; }
+    .article {
+      padding: 16px 0; border-bottom: 1px solid #28364b;
+    }
+    .article:last-child { border-bottom: 0; }
+    .article a { color: #8bb6ff; text-decoration: none; font-weight: bold; }
+    .article a:hover { text-decoration: underline; }
+    .meta { color: #93a4bd; font-size: 12px; margin: 5px 0; }
+    .summary { color: #d1daea; font-size: 14px; overflow-wrap: anywhere; }
+    .empty { color: #a9b7cc; text-align: center; padding: 28px 0; }
+    footer { text-align: center; padding: 22px; color: #71819a; font-size: 12px; }
+    @media (max-width: 600px) {
+      header { padding: 18px; }
+      form { flex-direction: column; }
+      input, select, button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">KianNews</div>
+  <div class="subtitle">مرکز یکپارچهٔ خبرها | ساده، سریع و حرفه‌ای</div>
+</header>
+<main>
+  <section class="toolbar">
+    <form action="/" method="get">
+      <input name="q" value="{{ q }}" placeholder="جست‌وجو در عنوان و متن خبرها...">
+      <select name="source">
+        <option value="">همهٔ منابع</option>
+        {% for s in sources %}
+        <option value="{{ s }}" {% if selected_source == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">جست‌وجو</button>
+    </form>
+    <div class="status">خبرهای تازه در بازدید یا با بروزرسانی دستی بررسی می‌شوند.</div>
+  </section>
+
+  <section class="filters">
+    <form action="/refresh" method="post" id="refreshForm">
+      <button type="submit" id="refreshBtn">⟳ بروزرسانی خبرها</button>
+      <a href="/" style="color:#a9c7ff;align-self:center">نمایش همهٔ خبرها</a>
+    </form>
+    <div class="status" id="refreshStatus" aria-live="polite">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}{{ message }}{% if not loop.last %} — {% endif %}{% endfor %}
+        {% else %}
+          آخرین بررسی: هنگام بازشدن این صفحه
+        {% endif %}
+      {% endwith %}
+    </div>
+  </section>
+
+  <section class="news">
+    <h2>آخرین خبرها ({{ items|length }})</h2>
+    {% if items %}
+      {% for item in items %}
+      <article class="article">
+        <a href="{{ item['link'] }}" target="_blank" rel="noopener noreferrer">{{ item['title'] }}</a>
+        <div class="meta">{{ item['source'] }}{% if item['published'] %} · {{ item['published'] }}{% endif %}</div>
+        {% if item['summary'] %}
+        <div class="summary">{{ item['summary']|striptags|truncate(450) }}</div>
+        {% endif %}
+      </article>
+      {% endfor %}
+    {% else %}
+      <div class="empty">هنوز خبری برای نمایش نیست. منابع را بررسی یا دوباره جست‌وجو کنید.</div>
+    {% endif %}
+  </section>
+</main>
+<footer>KianNews · گردآوری خبر از منابع عمومی</footer>
+<script>
+  const form = document.getElementById('refreshForm');
+  const btn = document.getElementById('refreshBtn');
+  form.addEventListener('submit', function () {
+    btn.disabled = true;
+    btn.textContent = 'در حال بررسی منابع...';
+    document.getElementById('refreshStatus').textContent =
+      'لطفاً صبر کنید؛ زمان دریافت به پاسخ منابع خبری بستگی دارد.';
+  });
+</script>
+</body>
+</html>
+```

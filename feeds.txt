@@ -1,0 +1,8 @@
+BBC فارسی|https://feeds.bbci.co.uk/persian/rss.xml
+باشگاه خبرنگاران جوان|https://www.yjc.ir/fa/rss/allnews
+تابناک|https://www.tabnak.ir/fa/rss/allnews
+ایسنا|https://www.isna.ir/rss
+مهر|https://www.mehrnews.com/rss
+خبرآنلاین|https://www.khabaronline.ir/rss
+ایرنا|https://www.irna.ir/rss/tp/1018
+YouTube Test|https://www.youtube.com/feeds/videos.xml?channel_id=UCAuUUnT6oDeKwE6v1NGQxug
